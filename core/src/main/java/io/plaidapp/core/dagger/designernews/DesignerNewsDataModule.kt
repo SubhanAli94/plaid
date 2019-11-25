@@ -18,7 +18,6 @@ package io.plaidapp.core.dagger.designernews
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Lazy
 import dagger.Module
 import dagger.Provides
@@ -79,11 +78,10 @@ class DesignerNewsDataModule {
     ): DesignerNewsService {
         return Retrofit.Builder()
             .baseUrl(DesignerNewsService.ENDPOINT)
-            .callFactory { client.get().newCall(it) }
+            .callFactory(client.get())
             .addConverterFactory(DeEnvelopingConverter(gson))
             .addConverterFactory(DesignerNewsSearchConverter.Factory())
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
             .create(DesignerNewsService::class.java)
     }
